@@ -187,7 +187,6 @@ class AuthorsTest extends TestCase
             ]
         ]);
         
-        // Check if the entry has been added to the database.
         $this->assertDatabaseMissing('authors', [
             'id' => 1,
             'name' => 'Kalema Edgar'
@@ -227,7 +226,6 @@ class AuthorsTest extends TestCase
             ]
         ]);
         
-        // Check if the entry has been added to the database.
         $this->assertDatabaseMissing('authors', [
             'id' => 1,
             'name' => 'Kalema Edgar'
@@ -242,9 +240,7 @@ class AuthorsTest extends TestCase
         // Setup a user to make authenticated requests
         $user = factory(User::class)->create();
         Passport::actingAs($user);
-
-        // To simulate the validation error, send a POST request with the type attribute value incorrect.
-        // Check the rules under app/Http/Requests/CreateAuthorRequest.php
+        
         $this->postJson('/api/v1/authors', [
             'data' => [
                 'type' => 'authors',
@@ -263,7 +259,39 @@ class AuthorsTest extends TestCase
             ]
         ]);
         
-        // Check if the entry has been added to the database.
+        $this->assertDatabaseMissing('authors', [
+            'id' => 1,
+            'name' => 'Kalema Edgar'
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_validates_that_the_attributes_member_is_an_object_given_when_creating_an_author()
+    {
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+        
+        $this->postJson('/api/v1/authors', [
+            'data' => [
+                'type' => 'authors',
+                'attributes' => 'not an object',
+            ]
+        ])
+        ->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The data.attributes must be an array.',
+                    'source' => [
+                        'pointer' => '/data/attributes',
+                    ]
+                ]
+            ]
+        ]);
+        
         $this->assertDatabaseMissing('authors', [
             'id' => 1,
             'name' => 'Kalema Edgar'
