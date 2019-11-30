@@ -12,5 +12,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
+        $this->call(AuthorsTableSeeder::class); // To be able to run the database seeder utilising the factory AuthorsFactory
     }
 }

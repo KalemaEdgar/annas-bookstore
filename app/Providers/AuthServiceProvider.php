@@ -28,5 +28,8 @@ class AuthServiceProvider extends ServiceProvider
 
         // To be able to issue or revoke access tokens, clients, and personal access tokens, we need to add the Passport::routes method in the boot method of the  AuthServiceProvider
         Passport::routes();
+
+        // Enable Implicit grant code authorization
+        // Passport::enableImplicitGrant();
     }
 }
