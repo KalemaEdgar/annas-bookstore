@@ -195,7 +195,7 @@ class AuthorsTest extends TestCase
     }
 
     /**
-     * Test to ensure that the request has a value of authors for the type attribute     * 
+     * Test to ensure that the request has a value of authors for the type attribute
      * @test
      */
     public function it_validates_that_the_type_member_has_the_value_of_authors_when_creating_an_author()
@@ -222,6 +222,42 @@ class AuthorsTest extends TestCase
                     'details' => 'The selected data.type is invalid.',
                     'source' => [
                         'pointer' => '/data/type',
+                    ]
+                ]
+            ]
+        ]);
+        
+        // Check if the entry has been added to the database.
+        $this->assertDatabaseMissing('authors', [
+            'id' => 1,
+            'name' => 'Kalema Edgar'
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_validates_that_the_attributes_member_has_been_given_when_creating_an_author()
+    {
+        // Setup a user to make authenticated requests
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+
+        // To simulate the validation error, send a POST request with the type attribute value incorrect.
+        // Check the rules under app/Http/Requests/CreateAuthorRequest.php
+        $this->postJson('/api/v1/authors', [
+            'data' => [
+                'type' => 'authors',
+            ]
+        ])
+        ->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The data.attributes field is required.',
+                    'source' => [
+                        'pointer' => '/data/attributes',
                     ]
                 ]
             ]
