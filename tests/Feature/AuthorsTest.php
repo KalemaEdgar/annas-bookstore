@@ -299,6 +299,79 @@ class AuthorsTest extends TestCase
     }
 
     /**
+     * Validate that the name attribute is required
+     * @test
+     */
+    public function it_validates_that_a_name_attribute_is_given_when_creating_an_author()
+    {
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+        
+        $this->postJson('/api/v1/authors', [
+            'data' => [
+                'type' => 'authors',
+                'attributes' => [
+                    'name' => ''
+                ]
+            ]
+        ])
+        ->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The data.attributes.name field is required.',
+                    'source' => [
+                        'pointer' => '/data/attributes/name',
+                    ]
+                ]
+            ]
+        ]);
+        
+        $this->assertDatabaseMissing('authors', [
+            'id' => 1,
+            'name' => 'Kalema Edgar'
+        ]);
+    }
+
+    /**
+     * Validate that the name attribute is a string
+     * We give an integer value in the name member instead of a string and assert that the validation catches this.
+     * @test
+     */
+    public function it_validates_that_a_name_attribute_is_a_string_when_creating_an_author()
+    {
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+        
+        $this->postJson('/api/v1/authors', [
+            'data' => [
+                'type' => 'authors',
+                'attributes' => [
+                    'name' => 47
+                ]
+            ]
+        ])
+        ->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The data.attributes.name must be a string.',
+                    'source' => [
+                        'pointer' => '/data/attributes/name',
+                    ]
+                ]
+            ]
+        ]);
+        
+        $this->assertDatabaseMissing('authors', [
+            'id' => 1,
+            'name' => 'Kalema Edgar'
+        ]);
+    }
+
+    /**
      * Method to test if we can update an author from a resource object
      * Make a POST request with the necessary data and then 
      * - assert that we get the correct status code (200 OK).
