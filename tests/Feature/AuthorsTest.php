@@ -149,6 +149,52 @@ class AuthorsTest extends TestCase
     }
 
     /**
+     * Test to ensure the validation rules are working when creating an author
+     * Make a POST request with the a mandatory attribute missing like "type"
+     * - assert that we get the correct status code (422).
+     * - Validate that we receive an object in the data member.
+     * - Validate the type of the resource object, both that it is actually a part of the resource object, but also that the value is authors.
+     * - Assert against what is being returned from the API. We would like a correct error form that adheres to the conventions of the JSON:API specification
+     * 
+     * @test
+     */
+    public function it_validates_that_the_type_member_is_given_when_creating_an_author()
+    {
+        // Setup a user to make authenticated requests
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+
+        // To simulate the validation error, send a POST request with the type attribute missing. (The "Type" is mandatory to the API)
+        // Check the rules under app/Http/Requests/CreateAuthorRequest.php
+        $this->postJson('/api/v1/authors', [
+            'data' => [
+                'type' => '',
+                'attributes' => [
+                    'name' => 'Kalema Edgar'
+                ]
+            ]
+        ])
+        ->assertStatus(422)
+        ->assertJson([ // The invalidJson function under app\Exceptions\Handler.php deals with formatting the response as we want it
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The data.type field is required.',
+                    'source' => [
+                        'pointer' => '/data/type',
+                    ]
+                ]
+            ]
+        ]);
+        
+        // Check if the entry has been added to the database.
+        $this->assertDatabaseMissing('authors', [
+            'id' => 1,
+            'name' => 'Kalema Edgar'
+        ]);
+    }
+
+    /**
      * Method to test if we can update an author from a resource object
      * Make a POST request with the necessary data and then 
      * - assert that we get the correct status code (200 OK).

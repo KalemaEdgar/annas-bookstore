@@ -3,7 +3,9 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -48,4 +50,35 @@ class Handler extends ExceptionHandler
     {
         return parent::render($request, $exception);
     }
+
+    /**
+     * Overriding the invalid-Json method, to allow us have custom error messages from Laravel for our API
+     * This is being utilised
+     *
+     * @param [type] $request
+     * @param ValidationException $exception
+     * @return void
+     */
+    protected function invalidJson($request, ValidationException $exception)
+    {
+        // Here, we instantiate a new Collection and give it the validator’s array of errors.
+        // Through the map method, we go through each entry in the array and map it into the desired error object that adheres to the JSON:API specification.
+        // Lastly, we call the values method on the collection, which will reset the keys to consecutive integers.
+        $errors = ( new Collection($exception->validator->errors()) )
+            ->map(function ($error, $key) {
+                return [
+                    'title'   => 'Validation Error',
+                    'details' => $error[0],
+                    'source'  => [
+                        'pointer' => '/' . str_replace('.', '/', $key),
+                    ]
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'errors' => $errors
+        ], $exception->status);
+    }
+
 }
