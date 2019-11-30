@@ -195,6 +195,46 @@ class AuthorsTest extends TestCase
     }
 
     /**
+     * Test to ensure that the request has a value of authors for the type attribute     * 
+     * @test
+     */
+    public function it_validates_that_the_type_member_has_the_value_of_authors_when_creating_an_author()
+    {
+        // Setup a user to make authenticated requests
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+
+        // To simulate the validation error, send a POST request with the type attribute value incorrect.
+        // Check the rules under app/Http/Requests/CreateAuthorRequest.php
+        $this->postJson('/api/v1/authors', [
+            'data' => [
+                'type' => 'authaaazr', // Sending an incorrect value for type attribute (authaaazr instead of authors)
+                'attributes' => [
+                    'name' => 'Kalema Edgar'
+                ]
+            ]
+        ])
+        ->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The selected data.type is invalid.',
+                    'source' => [
+                        'pointer' => '/data/type',
+                    ]
+                ]
+            ]
+        ]);
+        
+        // Check if the entry has been added to the database.
+        $this->assertDatabaseMissing('authors', [
+            'id' => 1,
+            'name' => 'Kalema Edgar'
+        ]);
+    }
+
+    /**
      * Method to test if we can update an author from a resource object
      * Make a POST request with the necessary data and then 
      * - assert that we get the correct status code (200 OK).
