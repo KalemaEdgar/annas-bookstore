@@ -36,7 +36,8 @@ class UpdateAuthorRequest extends FormRequest
             'data' => 'required|array',
             'data.id' => 'required|string',
             'data.type' => 'required|in:authors',
-            'data.attributes' => 'sometimes|required|array',
+            // 'data.attributes' => 'sometimes|required|array',
+            'data.attributes' => 'required|array',
             'data.attributes.name' => 'sometimes|required|string',
         ];
     }

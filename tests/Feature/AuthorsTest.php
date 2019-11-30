@@ -629,8 +629,7 @@ class AuthorsTest extends TestCase
             'errors' => [
                 [
                     'title' => 'Validation Error',
-                    'details' => 'The data.attributes must be an
-                    array.',
+                    'details' => 'The data.attributes must be an array.',
                     'source' => [
                         'pointer' => '/data/attributes',
                     ]
