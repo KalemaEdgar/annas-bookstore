@@ -32,7 +32,11 @@ class AuthorsTest extends TestCase
         Passport::actingAs($user);
 
         // Make a request to our endpoint to fetch data
-        $this->getJson('/api/v1/authors/1')
+        // The second argument in the getJson method lets us supply the headers for the request in an array.
+        $this->getJson('/api/v1/authors/1', [
+                'accept' => 'application/vnd.api+json',
+                'content-type' => 'application/vnd.api+json',
+            ])
             ->assertStatus(200) // Check if the response status code is 200 which means SUCCESSFUL
             ->assertJson([ // Check if the returned response format is as expected
                 "data" => [
@@ -66,7 +70,10 @@ class AuthorsTest extends TestCase
 
         // $this->getJson('/api/v1/authors') // What is the difference with getJson() and just using get(). Both are working fine
         // $response = $this->get('/api/v1/authors')
-        $this->get('/api/v1/authors')
+        $this->get('/api/v1/authors', [
+                'accept' => 'application/vnd.api+json',
+                'content-type' => 'application/vnd.api+json',
+            ])
             ->assertStatus(200)
             ->assertJson([
                 "data" => [
@@ -127,7 +134,11 @@ class AuthorsTest extends TestCase
                     'name' => 'Kalema Edgar'
                 ]
             ]
-        ])->assertStatus(201) // Check if the resource has been added and correct status sent back
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(201) // Check if the resource has been added and correct status sent back
         ->assertHeader('Location', url('/api/v1/authors/1')) // Check if the response has the Location header to this resource
         ->assertJson([ // Check if the returned response format is as expected
             "data" => [
@@ -173,6 +184,9 @@ class AuthorsTest extends TestCase
                     'name' => 'Kalema Edgar'
                 ]
             ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
         ])
         ->assertStatus(422)
         ->assertJson([ // The invalidJson function under app\Exceptions\Handler.php deals with formatting the response as we want it
@@ -212,6 +226,9 @@ class AuthorsTest extends TestCase
                     'name' => 'Kalema Edgar'
                 ]
             ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
         ])
         ->assertStatus(422)
         ->assertJson([
@@ -245,6 +262,9 @@ class AuthorsTest extends TestCase
             'data' => [
                 'type' => 'authors',
             ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
         ])
         ->assertStatus(422)
         ->assertJson([
@@ -278,6 +298,9 @@ class AuthorsTest extends TestCase
                 'type' => 'authors',
                 'attributes' => 'not an object',
             ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
         ])
         ->assertStatus(422)
         ->assertJson([
@@ -314,6 +337,9 @@ class AuthorsTest extends TestCase
                     'name' => ''
                 ]
             ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
         ])
         ->assertStatus(422)
         ->assertJson([
@@ -351,6 +377,9 @@ class AuthorsTest extends TestCase
                     'name' => 47
                 ]
             ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
         ])
         ->assertStatus(422)
         ->assertJson([
@@ -399,7 +428,11 @@ class AuthorsTest extends TestCase
                     'name' => 'Josephine Balungi'
                 ]
             ]
-        ])->assertStatus(200)
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(200)
         ->assertJson([ // Check that the updated data is sent back to the client
             "data" => [
                 "id" => '1',
@@ -438,7 +471,11 @@ class AuthorsTest extends TestCase
                     'name' => 'Josephine Balungi'
                 ]
             ]
-        ])->assertStatus(422)
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(422)
         ->assertJson([
             'errors' => [
                 [
@@ -479,7 +516,11 @@ class AuthorsTest extends TestCase
                     'name' => 'Kalema Edgar'
                 ]
             ]
-        ])->assertStatus(422)
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(422)
         ->assertJson([
             'errors' => [
                 [
@@ -516,6 +557,9 @@ class AuthorsTest extends TestCase
                     'name' => 'Kalema Edgar'
                 ]
             ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
         ])
         ->assertStatus(422)
         ->assertJson([
@@ -554,6 +598,9 @@ class AuthorsTest extends TestCase
                     'name' => 'Kalema Edgar'
                 ]
             ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
         ])
         ->assertStatus(422)
         ->assertJson([
@@ -588,6 +635,9 @@ class AuthorsTest extends TestCase
                 'id' => '1',
                 'type' => 'authors',
             ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
         ])
         ->assertStatus(422)
         ->assertJson([
@@ -623,6 +673,9 @@ class AuthorsTest extends TestCase
                 'type' => 'authors',
                 'attributes' => 'not an object',
             ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
         ])
         ->assertStatus(422)
         ->assertJson([
@@ -660,7 +713,11 @@ class AuthorsTest extends TestCase
                     'name' => 123
                 ]
             ]
-        ])->assertStatus(422)
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(422)
         ->assertJson([
             'errors' => [
                 [

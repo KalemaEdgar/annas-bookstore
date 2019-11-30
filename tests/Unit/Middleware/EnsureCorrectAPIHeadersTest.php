@@ -117,4 +117,42 @@ class EnsureCorrectAPIHeadersTest extends TestCase
         $this->assertEquals(200, $response->status());
     }
 
+    /** @test */
+    public function it_ensures_that_a_content_type_header_adhering_to_json_api_spec_is_on_response() 
+    {
+        // Initiate a request
+        $request = Request::create('/test', 'GET');
+        // Set the correct request headers
+        $request->headers->set('accept', 'application/vnd.api+json');
+        $request->headers->set('content-type', 'application/vnd.api+json');
+
+        // Instatiate the middleware
+        $middleware = new EnsureCorrectAPIHeaders;
+
+        $response = $middleware->handle($request, function($request) {
+            return new Response();
+        });
+
+        $this->assertEquals(200, $response->status());
+        $this->assertEquals('application/vnd.api+json', $response->headers->get('content-type'));
+    }
+
+    /** 
+     * Test to ensure that the correct Content-Type header is set even for failed requests
+     * In this scenario, the requests headers are not set simulating a failure
+     * @test 
+     */
+    public function when_aborting_for_a_missing_accept_header_the_correct_content_type_header_is_set()
+    {
+        $request = Request::create('/test', 'GET');
+        $middleware = new EnsureCorrectAPIHeaders;
+        
+        $response = $middleware->handle($request, function($request){
+            return new Response();
+        });
+
+        $this->assertEquals($response->status(), 406);
+        $this->assertEquals('application/vnd.api+json', $response->headers->get('content-type'));
+    }
+
 }
