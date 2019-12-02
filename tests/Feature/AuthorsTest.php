@@ -764,4 +764,119 @@ class AuthorsTest extends TestCase
             'name' => $author->name
         ]);
     }
+
+    /**
+     * I didnot implement this since as of now, the spatie/laravel-query-builder doesnot support Laravel 6 
+     * @test */
+    // public function it_can_sort_authors_by_name_through_a_sort_query_parameter()
+    // {
+    //     // Get a user for authentication
+    //     $user = factory(User::class)->create();
+    //     Passport::actingAs($user);
+
+    //     $authors = collect([
+    //         'Bertram',
+    //         'Claus',
+    //         'Anna',
+    //     ])->map(function($name) {
+    //         return factory(Author::class)->create([
+    //             'name' => $name
+    //         ]);
+    //     });
+            
+    //     $this->get('/api/v1/authors?sort=name', [
+    //         'accept' => 'application/vnd.api+json',
+    //         'content-type' => 'application/vnd.api+json',
+    //     ])
+    //     ->assertStatus(200)
+    //     ->assertJson([
+    //         "data" => [
+    //             [
+    //                 "id" => '3',
+    //                 "type" => "authors",
+    //                 "attributes" => [
+    //                     'name' => 'Anna',
+    //                     'created_at' => $authors[2]->created_at->toJSON(),
+    //                     'updated_at' => $authors[2]->updated_at->toJSON(),
+    //                 ]
+    //             ],
+    //             [
+    //                 "id" => '1',
+    //                 "type" => "authors",
+    //                 "attributes" => [
+    //                     'name' => 'Bertram',
+    //                     'created_at' => $authors[0]->created_at->toJSON(),
+    //                     'updated_at' => $authors[0]->updated_at->toJSON(),
+    //                 ]
+    //             ],
+    //             [
+    //                 "id" => '2',
+    //                 "type" => "authors",
+    //                 "attributes" => [
+    //                     'name' => 'Claus',
+    //                     'created_at' => $authors[1]->created_at->toJSON(),
+    //                     'updated_at' => $authors[1]->updated_at->toJSON(),
+    //                 ]
+    //             ],
+    //         ]
+    //     ]);
+    // }
+
+    /** 
+     * @test
+     * Test for sorting in descending order
+     */
+    // public function it_can_sort_authors_by_name_in_descending_order_through_a_sort_query_parameter()
+    // {
+    //     $user = factory(User::class)->create();
+    //     Passport::actingAs($user);
+    //     $authors = collect([
+    //         'Bertram',
+    //         'Claus',
+    //         'Anna',
+    //     ])->map(function($name){
+    //         return factory(Author::class)->create([
+    //             'name' => $name
+    //         ]);
+    //     });
+
+    //     // Add a minus in front of our name value in the query parameter to convey that we want to sort in descending order.
+    //     $this->get('/api/v1/authors?sort=-name', [
+    //         'accept' => 'application/vnd.api+json',
+    //         'content-type' => 'application/vnd.api+json',
+    //     ])
+    //     ->assertStatus(200)
+    //     ->assertJson([
+    //         "data" => [
+    //             [
+    //                 "id" => '2',
+    //                 "type" => "authors",
+    //                 "attributes" => [
+    //                     'name' => 'Claus',
+    //                     'created_at' => $authors[1]->created_at->toJSON(),
+    //                     'updated_at' => $authors[1]->updated_at->toJSON(),
+    //                 ]
+    //             ],
+    //             [
+    //                 "id" => '1',
+    //                 "type" => "authors",
+    //                 "attributes" => [
+    //                     'name' => 'Bertram',
+    //                     'created_at' => $authors[0]->created_at->toJSON(),
+    //                     'updated_at' => $authors[0]->updated_at->toJSON(),
+    //                 ]
+    //             ],
+    //             [
+    //                 "id" => '3',
+    //                 "type" => "authors",
+    //                 "attributes" => [
+    //                     'name' => 'Anna',
+    //                     'created_at' => $authors[2]->created_at->toJSON(),
+    //                     'updated_at' => $authors[2]->updated_at->toJSON(),
+    //                 ]
+    //             ],
+    //         ]
+    //     ]);
+    // }
+
 }

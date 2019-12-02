@@ -33,6 +33,9 @@ Route::middleware('auth:api')->prefix('v1')->group(function() {
     Route::apiResource('authors', 'AuthorsController'); // Single route that includes all the API required routes. Use php artisan route:list to see all the routes generated for authors
     // Route::get('/authors', 'AuthorsController@index');
     // Route::get('/authors/{author}', 'AuthorsController@show');
+
+    // Books
+    Route::apiResource('books', 'BooksController');
 });
 
 // This route is protected using the Client Credentials Grant (OAuth2 grant).
