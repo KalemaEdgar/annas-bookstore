@@ -428,7 +428,7 @@ class BooksTest extends TestCase
     }
 
     /** @test */
-    public function it_validates_that_a_publication_year_attribute_is_a_string_when_creating_an_()
+    public function it_validates_that_a_publication_year_attribute_is_a_string_when_creating_a_book()
     {
         $user = factory(User::class)->create();
         Passport::actingAs($user);
@@ -457,6 +457,414 @@ class BooksTest extends TestCase
                     ]
                 ]
             ]
+        ]);
+    }
+
+    /** @test */
+    public function it_can_update_a_book_from_a_resource_object()
+    {
+        Passport::actingAs(factory(User::class)->create());
+        // We need our book to be created so we can update it with new data
+        $book = factory(Book::class)->create();
+
+        // $response = $this->patchJson('/api/v1/books/1', [
+        $this->patchJson('/api/v1/books/1', [
+            'data' => [
+                'id' => '1',
+                'type' => 'books',
+                'attributes' => [
+                    'title' => 'Keds book update',
+                    'description' => 'A book for the API lovers',
+                    'publication_year' => '2020',
+                ]
+            ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(200)
+        ->assertJson([
+            'data' => [
+                'id' => '1',
+                'type' => 'books',
+                'attributes' => [
+                    'title' => 'Keds book update',
+                    'description' => 'A book for the API lovers',
+                    'publication_year' => '2020',
+                    'created_at' => now()->setMilliseconds(0)->toJSON(),
+                    'updated_at' => now()->setMilliseconds(0)->toJSON(),
+                ]
+            ]
+        ]);
+
+        $this->assertDatabaseHas('books', [
+            'id' => 1,
+            'title' => 'Keds book update',
+            'description' => 'A book for the API lovers',
+            'publication_year' => '2020',
+        ]);
+
+        // dd(json_decode($response->getContent()));
+    }
+
+    /** @test */
+    public function it_validates_that_an_id_member_is_given_when_updating_an_book()
+    {
+        Passport::actingAs(factory(User::class)->create());
+        // We need our book to be created so we can update it with new data
+        $book = factory(Book::class)->create();
+
+        // Miss out the id attribute since that is what we are testing
+        $this->patchJson('/api/v1/books/1', [
+            'data' => [
+                'type' => 'books',
+                'attributes' => [
+                    'title' => 'Keds book update',
+                    'description' => 'A book for the API lovers',
+                    'publication_year' => '2020',
+                ]
+            ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The data.id field is required.',
+                    'source' => [
+                        'pointer' => '/data/id',
+                    ]
+                ]
+            ]
+        ]);
+
+        $this->assertDatabaseHas('books', [
+            'id' => '1',
+            'title' => $book->title,
+        ]);
+    }
+
+    /** @test */
+    public function it_validates_that_an_id_member_is_a_string_when_updating_an_book()
+    {
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+        $book = factory(Book::class)->create();
+
+        $this->patchJson('/api/v1/books/1', [
+            'data' => [
+                'id' => 1,
+                'type' => 'books',
+                'attributes' => [
+                    'title' => 'Building an API with Laravel',
+                    'description' => 'A book about API development',
+                    'publication_year' => '2019',
+                ]
+            ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The data.id must be a string.',
+                    'source' => [
+                        'pointer' => '/data/id',
+                    ]
+                ]
+            ]
+        ]);
+        
+        $this->assertDatabaseHas('books', [
+            'id' => 1,
+            'title' => $book->title,
+        ]);
+    }
+
+    /** @test */
+    public function it_validates_that_the_type_member_is_given_when_updating_an_book()
+    {
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+        $book = factory(Book::class)->create();
+        
+        $this->patchJson('/api/v1/books/1', [
+            'data' => [
+                'id' => '1',
+                'attributes' => [
+                    'title' => 'Building an API with Laravel',
+                    'description' => 'A book about API development',
+                    'publication_year' => '2019',
+                ]
+            ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The data.type field is required.',
+                    'source' => [
+                        'pointer' => '/data/type',
+                    ]
+                ]
+            ]
+        ]);
+
+        $this->assertDatabaseHas('books', [
+            'id' => 1,
+            'title' => $book->title,
+        ]);
+    }
+
+    /** @test */
+    public function it_validates_that_the_type_member_has_the_value_of_books_when_updating_an_book()
+    {
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+        $book = factory(Book::class)->create();
+
+        $this->patchJson('/api/v1/books/1', [
+            'data' => [
+                'id' => '1',
+                'type' => 'booo',
+                'attributes' => [
+                    'title' => 'Building an API with Laravel',
+                    'description' => 'A book about API development',
+                    'publication_year' => '2019',
+                ]
+            ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The selected data.type is invalid.',
+                    'source' => [
+                        'pointer' => '/data/type',
+                    ]
+                ]
+            ]
+        ]);
+
+        $this->assertDatabaseHas('books', [
+            'id' => 1,
+            'title' => $book->title,
+        ]);
+    }
+
+    /** @test */
+    public function it_validates_that_the_attributes_member_has_been_given_when_updating_an_book()
+    {
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+        $book = factory(Book::class)->create();
+
+        $this->patchJson('/api/v1/books/1', [
+            'data' => [
+                'id' => '1',
+                'type' => 'books',
+            ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The data.attributes field is required.',
+                    'source' => [
+                        'pointer' => '/data/attributes',
+                    ]
+                ]
+            ]
+        ]);
+
+        $this->assertDatabaseHas('books', [
+            'id' => 1,
+            'title' => $book->title,
+        ]);
+    }
+
+    /** @test */
+    public function it_validates_that_the_attributes_member_is_an_object_given_when_updating_a_book()
+    {
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+        $book = factory(Book::class)->create();
+
+        $this->patchJson('/api/v1/books/1', [
+            'data' => [
+                'id' => '1',
+                'type' => 'books',
+                'attributes' => 'this is not an object'
+            ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The data.attributes must be an array.',
+                    'source' => [
+                        'pointer' => '/data/attributes',
+                    ]
+                ]
+            ]
+        ]);
+
+        $this->assertDatabaseHas('books', [
+            'id' => 1,
+            'title' => $book->title,
+        ]);
+    }
+
+    /** @test */
+    public function it_validates_that_a_title_attribute_is_a_string_when_updating_an_book()
+    {
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+        $book = factory(Book::class)->create();
+
+        $this->patchJson('/api/v1/books/1', [
+            'data' => [
+                'id' => '1',
+                'type' => 'books',
+                'attributes' => [
+                    'title' => 42,
+                ]
+            ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The data.attributes.title must be a string.',
+                    'source' => [
+                        'pointer' => '/data/attributes/title',
+                    ]
+                ]
+            ]
+        ]);
+
+        $this->assertDatabaseHas('books', [
+            'id' => 1,
+            'title' => $book->title,
+        ]);
+    }
+
+    /** @test */
+    public function it_validates_that_a_description_attribute_is_a_string_when_updating_an_book()
+    {
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+        $book = factory(Book::class)->create();
+        
+        $this->patchJson('/api/v1/books/1', [
+            'data' => [
+                'id' => '1',
+                'type' => 'books',
+                'attributes' => [
+                    'description' => 42,
+                ]
+            ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The data.attributes.description must be a string.',
+                    'source' => [
+                        'pointer' => '/data/attributes/description',
+                    ]
+                ]
+            ]
+        ]);
+        
+        $this->assertDatabaseHas('books', [
+            'id' => 1,
+            'title' => $book->title,
+        ]);
+    }
+    
+    /** @test */
+    public function it_validates_that_a_publication_year_attribute_is_a_string_when_updating_a_book()
+    {
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+        $book = factory(Book::class)->create();
+        
+        $this->patchJson('/api/v1/books/1', [
+            'data' => [
+                'id' => '1',
+                'type' => 'books',
+                'attributes' => [
+                    'publication_year' => 2019,
+                ]
+            ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The data.attributes.publication year must be a string.',
+                    'source' => [
+                        'pointer' => '/data/attributes/publication_year',
+                    ]
+                ]
+            ]
+        ]);
+
+        $this->assertDatabaseHas('books', [
+            'id' => 1,
+            'title' => $book->title,
+        ]);
+    }
+    
+    /** @test */
+    public function it_can_delete_a_book_through_a_delete_request() 
+    {
+        Passport::actingAs(factory(User::class)->create());
+        $book = factory(Book::class)->create();
+
+        $this->delete('/api/v1/books/1', [], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])->assertStatus(204);
+
+        $this->assertDatabaseMissing('books', [
+            'id' => 1,
+            'title' => $book->title,
         ]);
     }
 
