@@ -36,6 +36,16 @@ Route::middleware('auth:api')->prefix('v1')->group(function() {
 
     // Books
     Route::apiResource('books', 'BooksController');
+
+    // Books Authors Relationship
+    Route::get('books/{book}/relationships/authors', function () {
+        return true;
+    })->name('books.relationships.authors');
+
+    Route::get('books/{book}/authors', function () {
+        return true;
+    })->name('books.authors');
+    
 });
 
 // This route is protected using the Client Credentials Grant (OAuth2 grant).
