@@ -251,4 +251,130 @@ class BooksRelationshipsTest extends TestCase
         ]);
     }
 
+    /** @test */
+    public function it_validates_that_the_id_member_is_given_when_updating_a_relationship()
+    {
+        $book = factory(Book::class)->create();
+        $authors = factory(Author::class, 5)->create();
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+        
+        $this->patchJson('/api/v1/books/1/relationships/authors',[
+            'data' => [
+                [
+                    'type' => 'authors',
+                ],
+            ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The data.0.id field is required.',
+                    'source' => [
+                        'pointer' => '/data/0/id',
+                    ]
+                ]
+            ]
+        ]);
+    }
+
+    /** @test */
+    public function it_validates_that_the_id_member_is_a_string_when_updating_a_relationship()
+    {
+        $book = factory(Book::class)->create();
+        $authors = factory(Author::class, 5)->create();
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+        
+        $this->patchJson('/api/v1/books/1/relationships/authors', [
+            'data' => [
+                [
+                    'id' => 5,
+                    'type' => 'authors',
+                ],
+            ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The data.0.id must be a string.',
+                    'source' => [
+                        'pointer' => '/data/0/id',
+                    ]
+                ]
+            ]
+        ]);
+    }
+
+    /** @test */
+    public function it_validates_that_the_type_member_is_given_when_updating_a_relationship()
+    {
+        $book = factory(Book::class)->create();
+        $authors = factory(Author::class, 5)->create();
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+        
+        $this->patchJson('/api/v1/books/1/relationships/authors', [
+            'data' => [
+                [
+                    'id' => '5',
+                ],
+            ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The data.0.type field is required.',
+                    'source' => [
+                        'pointer' => '/data/0/type',
+                    ]
+                ]
+            ]
+        ]);
+    }
+
+    /** @test */
+    public function it_validates_that_the_type_member_has_a_value_of_authors_when_updating_a_relationship()
+    {
+        $book = factory(Book::class)->create();
+        $authors = factory(Author::class, 5)->create();
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+
+        $this->patchJson('/api/v1/books/1/relationships/authors', [
+            'data' => [
+                [
+                    'id' => '5',
+                    'type' => 'books',
+                ],
+            ]
+        ], [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])->assertStatus(422)
+        ->assertJson([
+            'errors' => [
+                [
+                    'title' => 'Validation Error',
+                    'details' => 'The selected data.0.type is invalid.',
+                    'source' => [
+                        'pointer' => '/data/0/type',
+                    ]
+                ]
+            ]
+        ]);
+    }
+
 }
