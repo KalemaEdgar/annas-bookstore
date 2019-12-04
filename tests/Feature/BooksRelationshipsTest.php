@@ -377,4 +377,142 @@ class BooksRelationshipsTest extends TestCase
         ]);
     }
 
+    /** @test */
+    // public function it_can_get_all_related_authors_as_resource_objects_from_related_link()
+    // {
+    //     // $this->withoutExceptionHandling();
+        
+    //     $book = factory(Book::class)->create();
+    //     $authors = factory(Author::class, 3)->create();
+    //     $book->authors()->sync($authors->pluck('id'));
+
+    //     $user = factory(User::class)->create();
+    //     Passport::actingAs($user);
+
+    //     $this->getJson('/api/v1/books/1/authors',[
+    //         'accept' => 'application/vnd.api+json',
+    //         'content-type' => 'application/vnd.api+json',
+    //     ])
+    //     ->assertStatus(200)
+    //     ->assertJson([
+    //         'data' => [
+    //             [
+    //                 "id" => '1',
+    //                 "type" => "authors",
+    //                 "attributes" => [
+    //                     'name' => $authors[0]->name,
+    //                     'created_at' => $authors[0]->created_at->toJSON(),
+    //                     'updated_at' => $authors[0]->updated_at->toJSON(),
+    //                 ]
+    //             ],
+    //             [
+    //                 "id" => '2',
+    //                 "type" => "authors",
+    //                 "attributes" => [
+    //                     'name' => $authors[1]->name,
+    //                     'created_at' => $authors[1]->created_at->toJSON(),
+    //                     'updated_at' => $authors[1]->updated_at->toJSON(),
+    //                 ]
+    //             ],
+    //             [
+    //                 "id" => '3',
+    //                 "type" => "authors",
+    //                 "attributes" => [
+    //                     'name' => $authors[2]->name,
+    //                     'created_at' => $authors[2]->created_at->toJSON(),
+    //                     'updated_at' => $authors[2]->updated_at->toJSON(),
+    //                 ]
+    //             ],
+    //         ]
+    //     ]);
+    // }
+
+    /** @test */
+    // public function it_includes_related_resource_objects_when_an_include_query_param_is_given()
+    // {
+    //      // Requires the Spatie Query Builder package which I didnot import due to compatibility issues with Laravel 6
+    //     $book = factory(Book::class)->create();
+    //     $authors = factory(Author::class, 3)->create();
+    //     $book->authors()->sync($authors->pluck('id'));
+    //     $user = factory(User::class)->create();
+    //     Passport::actingAs($user);
+
+    //     $this->getJson('/api/v1/books/1?include=authors', [
+    //         'accept' => 'application/vnd.api+json',
+    //         'content-type' => 'application/vnd.api+json',
+    //     ])
+    //     ->assertStatus(200)
+    //     ->assertJson([
+    //         'data' => [
+    //             'id' => '1',
+    //             'type' => 'books',
+    //             'relationships' => [
+    //                 'authors' => [
+    //                     'links' => [
+    //                         'self' => route('books.relationships.authors', ['book' => $book->id]),
+    //                         'related' => route('books.authors', ['book' => $book->id]),
+    //                     ],
+    //                     'data' => [
+    //                         [
+    //                             'id' => (string)$authors->get(0)->id,
+    //                             'type' => 'authors'
+    //                         ],
+    //                         [
+    //                             'id' => (string)$authors->get(1)->id,
+    //                             'type' => 'authors'
+    //                         ]
+    //                     ]
+    //                 ]
+    //             ]
+    //         ],
+    //         'included' => [
+    //             [
+    //                 "id" => '1',
+    //                 "type" => "authors",
+    //                 "attributes" => [
+    //                     'name' => $authors[0]->name,
+    //                     'created_at' => $authors[0]->created_at->    toJSON(),
+    //                     'updated_at' => $authors[0]->updated_at->toJSON(),
+    //                 ]
+    //             ],
+    //             [
+    //                 "id" => '2',
+    //                 "type" => "authors",
+    //                 "attributes" => [
+    //                     'name' => $authors[1]->name,
+    //                     'created_at' => $authors[1]->created_at->toJSON(),
+    //                     'updated_at' => $authors[1]->updated_at->toJSON(),
+    //                 ]
+    //             ],
+    //             [
+    //                 "id" => '3',
+    //                 "type" => "authors",
+    //                 "attributes" => [
+    //                     'name' => $authors[2]->name,
+    //                     'created_at' => $authors[2]->created_at->toJSON(),
+    //                     'updated_at' => $authors[2]->updated_at->toJSON(),
+    //                 ]
+    //             ],
+    //         ]
+    //     ]);
+    // }
+
+    /** @test */
+    // public function it_does_not_include_related_resource_objects_when_an_include_query_param_is_given()
+    // {
+    //     $this->withoutExceptionHandling();
+    //     $book = factory(Book::class)->create();
+    //     $user = factory(User::class)->create();
+    //     Passport::actingAs($user);
+
+    //     $this->getJson('/api/v1/books/1', [
+    //         'accept' => 'application/vnd.api+json',
+    //         'content-type' => 'application/vnd.api+json',
+    //     ])
+    //     ->assertStatus(200)
+    //     ->assertJsonMissing([
+    //         'included' => [],
+    //     ]);
+    // }
+
 }

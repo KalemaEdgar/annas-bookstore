@@ -61,6 +61,12 @@ class BooksController extends Controller
     {
         // return $book;
         return new BooksResource($book);
+        
+        // Requires the Spatie Query Builder package which I didnot import due to compatibility issues with Laravel 6
+        // $query = QueryBuilder::for(Book::where('id', $book))
+        //     ->allowedIncludes('authors')
+        //     ->firstOrFail();
+        // return new BooksResource($query);
     }
 
     /**

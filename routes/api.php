@@ -44,9 +44,12 @@ Route::middleware('auth:api')->prefix('v1')->group(function() {
 
     Route::patch('books/{book}/relationships/authors', 'BooksAuthorsRelationshipsController@update')->name('books.relationships.authors');
 
-    Route::get('books/{book}/authors', function () {
-        return true;
-    })->name('books.authors');
+    // Route for the related link - Get a collection of authors related to a certain book
+    Route::get('books/{book}/authors', 'BooksAuthorsRelatedController@index')->name('books.authors');
+
+    // Route::get('books/{book}/authors', function () {
+    //     return true;
+    // })->name('books.authors');
     
 });
 
