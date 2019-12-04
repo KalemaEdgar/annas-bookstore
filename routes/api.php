@@ -38,18 +38,30 @@ Route::middleware('auth:api')->prefix('v1')->group(function() {
     Route::apiResource('books', 'BooksController');
 
     // ------------------------------------
-    // Books Authors Relationship routes
+    // Books Authors Relationship routes - To be able to pick the authors for a certain book
     // ------------------------------------
+    // Make a GET request to the relationship and get the resource identifier objects of books related to the author
     Route::get('books/{book}/relationships/authors', 'BooksAuthorsRelationshipsController@index')->name('books.relationships.authors');
 
+    // We want to be able to make a PATCH request to the relationship to update it without adding or deleting resources themselves
     Route::patch('books/{book}/relationships/authors', 'BooksAuthorsRelationshipsController@update')->name('books.relationships.authors');
 
     // Route for the related link - Get a collection of authors related to a certain book
+    // We want to be able to get the related resource objects
     Route::get('books/{book}/authors', 'BooksAuthorsRelatedController@index')->name('books.authors');
 
     // Route::get('books/{book}/authors', function () {
     //     return true;
     // })->name('books.authors');
+
+    // ------------------------------------
+    // Authors Books Relationship routes - To be able to pick the books for a certain author
+    // ------------------------------------
+    Route::get('authors/{author}/relationships/books', 'AuthorsBooksRelationshipsController@index')->name('authors.relationships.books');
+    
+    Route::patch('authors/{author}/relationships/books', 'AuthorsBooksRelationshipsController@update')->name('authors.relationships.books');
+    
+    Route::get('authors/{author}/books', 'AuthorsBooksRelatedController@index')->name('authors.books');
     
 });
 

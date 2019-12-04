@@ -16,6 +16,12 @@ return [
                     'data.attributes.name' => 'sometimes|required|string',
                 ]
             ],
+            'relationships' => [
+                [
+                    'type' => 'books',
+                    'method' => 'books',
+                ]
+            ]
         ],
         'books' => [
             'allowedSorts'=> [
