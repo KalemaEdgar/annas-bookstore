@@ -18,6 +18,7 @@ class BooksResource extends JsonResource
     public function toArray($request)
     {
         // Change the response format to adhere to the JSON:API specification
+        // The resource objects actually work as an extension of our models, which makes it possible for us to use the $this keyword to access the attributes and relationships on our model.
         return [
             'id' => (string)$this->id,
             'type' => 'books',

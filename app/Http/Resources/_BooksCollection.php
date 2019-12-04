@@ -19,7 +19,14 @@ class BooksCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection,
+            // 'included' => $this->mergeIncludedRelations($request),
         ];
         // return parent::toArray($request);
+    }
+
+    private function mergeIncludedRelations($request)
+    {
+        $includes = $this->collection->flatMap->included($request)->unique()->values();
+        return $includes->isNotEmpty() ? $includes : new MissingValue();
     }
 }

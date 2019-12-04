@@ -16,7 +16,7 @@ class BooksTest extends TestCase
     public function it_returns_a_book_as_a_resource_object()
     {
         $this->withoutExceptionHandling();
-        
+
         // This test checks if we can get a book from the endpoint
         $user = factory(User::class)->create();
         Passport::actingAs($user);
@@ -45,6 +45,8 @@ class BooksTest extends TestCase
     /** @test */
     public function it_returns_all_books_as_a_collection_of_resource_objects()
     {
+        // $this->withoutExceptionHandling();
+
         $user = factory(User::class)->create();
         Passport::actingAs($user);
         $book = factory(Book::class, 2)->create();

@@ -23,6 +23,8 @@ class AuthorsTest extends TestCase
      */
     public function it_returns_an_author_as_a_resource_object()
     {
+        $this->withoutExceptionHandling();
+
         // Create an author for testing. We need to use the id generated to send to the API endpoint
         $author = factory(Author::class)->create(); // Returns a single model
 
@@ -61,6 +63,8 @@ class AuthorsTest extends TestCase
      */
     public function it_returns_all_authors_as_a_collection_of_resource_objects()
     {
+        $this->withoutExceptionHandling();
+
         // Get a user for authentication
         $user = factory(User::class)->create();
         Passport::actingAs($user);
@@ -123,6 +127,8 @@ class AuthorsTest extends TestCase
      */
     public function it_can_create_an_author_from_a_resource_object()
     {
+        $this->withoutExceptionHandling();
+        
         // Setup a user to make authenticated requests
         $user = factory(User::class)->create();
         Passport::actingAs($user);
