@@ -18,6 +18,12 @@ class Book extends AbstractAPIModel
         return $this->belongsToMany(Author::class);
     }
 
+    public function comments()
+    {
+        // This book has many comments
+        return $this->hasMany(Comment::class);
+    }
+
     /**
      * @return string
      */

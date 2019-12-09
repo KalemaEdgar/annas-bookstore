@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Author;
 use App\Book;
+use App\Comment;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Passport\Passport;
@@ -15,67 +16,9 @@ class BooksRelationshipsTest extends TestCase
     use DatabaseMigrations;
 
     /** @test */
-    // public function it_returns_a_relationship_to_authors_adhering_to_json_api_spec()
-    // {
-    //     $this->withoutExceptionHandling();
-    //     // 1. We set up our world
-    //         // a. We need a book to be able to get it through our API
-    //         // b. We need a couple of authors to exist to be able to add them as author for our book
-    //         // c. We need to be authenticated
-    //     // 2. We run the code we are testing here
-    //         // a. We make a GET request to the right API endpoint
-    //         // b. We add the right Accept and Content-Type headers
-    //     // 3. We assert against the result that
-    //         // a. We get a status code 200 OK back
-    //         // b. We see the relationships member
-    //         // c. We see the authors relationship
-    //         // d. We see the links member inside the relationship
-    //         // e. We see the resource linkage inside the relationship
-    //         // f. We see the resource identifier objects for the authors
-        
-    //     $book = factory(Book::class)->create();
-    //     $authors = factory(Author::class, 3)->create();
-    //     $book->authors()->sync($authors->pluck('id'));
-    //     $user = factory(User::class)->create();
-    //     Passport::actingAs($user);
-        
-    //     $this->getJson('/api/v1/books/1', [
-    //         'accept' => 'application/vnd.api+json',
-    //         'content-type' => 'application/vnd.api+json',
-    //     ])
-    //     ->assertStatus(200)
-    //     ->assertJson([
-    //         'data' => [
-    //             'id' => '1',
-    //             'type' => 'books',
-    //             'relationships' => [
-    //                 'authors' => [
-    //                     'links' => [
-    //                         'self' => route('books.relationships.authors', ['book' => $book->id]),
-    //                         'related' => route('books.authors', ['book' => $book->id]),
-    //                     ],
-    //                     'data' => [
-    //                         [
-    //                             'id' => $authors->get(0)->id,
-    //                             'type' => 'authors'
-    //                         ],
-    //                         [
-    //                             'id' => $authors->get(1)->id,
-    //                             'type' => 'authors'
-    //                         ]
-    //                     ]
-    //                 ]
-    //             ]
-    //         ]
-    //     ]);
-
-    //     // dd(json_decode($response->getContent()));
-    // }
-
-    /** @test */
     public function a_relationship_link_to_authors_returns_all_related_authors_as_resource_id_objects()
     {
-        $this->withoutExceptionHandling();
+        // $this->withoutExceptionHandling();
 
         $book = factory(Book::class)->create();
         $authors = factory(Author::class, 3)->create();
@@ -101,6 +44,41 @@ class BooksRelationshipsTest extends TestCase
                 [
                 'id' => '3',
                 'type' => 'authors',
+                ],
+            ]
+        ]);
+    }
+
+    /** @test */
+    public function a_relationship_link_to_comments_returns_all_related_comments_as_resource_id_objects()
+    {
+        $this->withoutExceptionHandling();
+        
+        $book = factory(Book::class)->create();
+        $comments = factory(Comment::class, 3)->make();
+        $book->comments()->saveMany($comments);
+
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+
+        $this->getJson('/api/v1/books/1/relationships/comments', [
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(200)
+        ->assertJson([
+            'data' => [
+                [
+                    'id' => '1',
+                    'type' => 'comments',
+                ],
+                [
+                    'id' => '2',
+                    'type' => 'comments',
+                ],
+                [
+                    'id' => '3',
+                    'type' => 'comments',
                 ],
             ]
         ]);
@@ -380,54 +358,162 @@ class BooksRelationshipsTest extends TestCase
     }
 
     /** @test */
-    // public function it_can_get_all_related_authors_as_resource_objects_from_related_link()
+    // public function it_returns_a_relationship_to_authors_adhering_to_json_api_spec()
     // {
-    //     // $this->withoutExceptionHandling();
+    //     $this->withoutExceptionHandling();
+    //     // 1. We set up our world
+    //         // a. We need a book to be able to get it through our API
+    //         // b. We need a couple of authors to exist to be able to add them as author for our book
+    //         // c. We need to be authenticated
+    //     // 2. We run the code we are testing here
+    //         // a. We make a GET request to the right API endpoint
+    //         // b. We add the right Accept and Content-Type headers
+    //     // 3. We assert against the result that
+    //         // a. We get a status code 200 OK back
+    //         // b. We see the relationships member
+    //         // c. We see the authors relationship
+    //         // d. We see the links member inside the relationship
+    //         // e. We see the resource linkage inside the relationship
+    //         // f. We see the resource identifier objects for the authors
         
     //     $book = factory(Book::class)->create();
     //     $authors = factory(Author::class, 3)->create();
     //     $book->authors()->sync($authors->pluck('id'));
-
     //     $user = factory(User::class)->create();
     //     Passport::actingAs($user);
-
-    //     $this->getJson('/api/v1/books/1/authors',[
+        
+    //     $this->getJson('/api/v1/books/1', [
     //         'accept' => 'application/vnd.api+json',
     //         'content-type' => 'application/vnd.api+json',
     //     ])
     //     ->assertStatus(200)
     //     ->assertJson([
     //         'data' => [
-    //             [
-    //                 "id" => '1',
-    //                 "type" => "authors",
-    //                 "attributes" => [
-    //                     'name' => $authors[0]->name,
-    //                     'created_at' => $authors[0]->created_at->toJSON(),
-    //                     'updated_at' => $authors[0]->updated_at->toJSON(),
+    //             'id' => '1',
+    //             'type' => 'books',
+    //             'relationships' => [
+    //                 'authors' => [
+    //                     'links' => [
+    //                         'self' => route('books.relationships.authors', ['book' => $book->id]),
+    //                         'related' => route('books.authors', ['book' => $book->id]),
+    //                     ],
+    //                     'data' => [
+    //                         [
+    //                             'id' => $authors->get(0)->id,
+    //                             'type' => 'authors'
+    //                         ],
+    //                         [
+    //                             'id' => $authors->get(1)->id,
+    //                             'type' => 'authors'
+    //                         ]
+    //                     ]
     //                 ]
-    //             ],
-    //             [
-    //                 "id" => '2',
-    //                 "type" => "authors",
-    //                 "attributes" => [
-    //                     'name' => $authors[1]->name,
-    //                     'created_at' => $authors[1]->created_at->toJSON(),
-    //                     'updated_at' => $authors[1]->updated_at->toJSON(),
+    //             ]
+    //         ]
+    //     ]);
+
+    //     // dd(json_decode($response->getContent()));
+    // }
+
+    /**
+     * @test
+     */
+    // public function it_returns_a_relationship_to_comments_adhering_to_json_api_spec()
+    // {
+    //     $book = factory(Book::class)->create();
+    //     $comments = factory(Comment::class, 3)->make();
+    //     $book->comments()->saveMany($comments);
+
+    //     $user = factory(User::class)->create();
+    //     Passport::actingAs($user);
+
+
+    //     $this->getJson('/api/v1/books/1?include=comments', [
+    //         'accept' => 'application/vnd.api+json',
+    //         'content-type' => 'application/vnd.api+json',
+    //     ])
+    //     ->assertStatus(200)
+    //     ->assertJson([
+    //         'data' => [
+    //             'id' => '1',
+    //             'type' => 'books',
+    //             'relationships' => [
+    //                 'comments' => [
+    //                     'links' => [
+    //                         'self' => route(
+    //                             'books.relationships.comments',
+    //                             ['id' => $book->id]
+    //                         ),
+    //                         'related' => route(
+    //                             'books.comments',
+    //                             ['id' => $book->id]
+    //                         ),
+    //                     ],
+    //                     'data' => [
+    //                         [
+    //                             'id' => $comments->get(0)->id,
+    //                             'type' => 'comments'
+    //                         ],
+    //                         [
+    //                             'id' => $comments->get(1)->id,
+    //                             'type' => 'comments'
+    //                         ]
+    //                     ]
     //                 ]
-    //             ],
-    //             [
-    //                 "id" => '3',
-    //                 "type" => "authors",
-    //                 "attributes" => [
-    //                     'name' => $authors[2]->name,
-    //                     'created_at' => $authors[2]->created_at->toJSON(),
-    //                     'updated_at' => $authors[2]->updated_at->toJSON(),
-    //                 ]
-    //             ],
+    //             ]
     //         ]
     //     ]);
     // }
+
+    /** @test */
+    public function it_can_get_all_related_authors_as_resource_objects_from_related_link()
+    {
+        $this->withoutExceptionHandling();
+        
+        $book = factory(Book::class)->create();
+        $authors = factory(Author::class, 3)->create();
+        $book->authors()->sync($authors->pluck('id'));
+
+        $user = factory(User::class)->create();
+        Passport::actingAs($user);
+
+        $this->getJson('/api/v1/books/1/authors',[
+            'accept' => 'application/vnd.api+json',
+            'content-type' => 'application/vnd.api+json',
+        ])
+        ->assertStatus(200)
+        ->assertJson([
+            'data' => [
+                [
+                    "id" => '1',
+                    "type" => "authors",
+                    "attributes" => [
+                        'name' => $authors[0]->name,
+                        'created_at' => $authors[0]->created_at->toJSON(),
+                        'updated_at' => $authors[0]->updated_at->toJSON(),
+                    ]
+                ],
+                [
+                    "id" => '2',
+                    "type" => "authors",
+                    "attributes" => [
+                        'name' => $authors[1]->name,
+                        'created_at' => $authors[1]->created_at->toJSON(),
+                        'updated_at' => $authors[1]->updated_at->toJSON(),
+                    ]
+                ],
+                [
+                    "id" => '3',
+                    "type" => "authors",
+                    "attributes" => [
+                        'name' => $authors[2]->name,
+                        'created_at' => $authors[2]->created_at->toJSON(),
+                        'updated_at' => $authors[2]->updated_at->toJSON(),
+                    ]
+                ],
+            ]
+        ]);
+    }
 
     /** @test */
     // public function it_includes_related_resource_objects_when_an_include_query_param_is_given()

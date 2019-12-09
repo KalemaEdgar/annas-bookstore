@@ -24,11 +24,27 @@ class JSONAPIRequest extends FormRequest
      */
     public function rules()
     {
+        // $rules = [
+        //     'data' => 'required|array',
+        //     'data.id' => ($this->method() === 'PATCH') ? 'required|string' : 'string',
+        //     'data.type' => ['required',Rule::in(array_keys(config('jsonapi.resources')))], // Consumer can only use the types defined in the config file
+        //     'data.attributes' => 'required|array',
+        // ];
+
         $rules = [
             'data' => 'required|array',
             'data.id' => ($this->method() === 'PATCH') ? 'required|string' : 'string',
-            'data.type' => ['required',Rule::in(array_keys(config('jsonapi.resources')))], // Consumer can only use the types defined in the config file
+            'data.type' => ['required',Rule::in(array_keys(config('jsonapi.resources')))],
             'data.attributes' => 'required|array',
+
+            'data.relationships' => 'array',
+            'data.relationships.*.data' => 'required|array',
+
+            'data.relationships.*.data.id' => [Rule::requiredIf($this->has('data.relationships.*.data.type')), 'string'],
+            'data.relationships.*.data.type' => [Rule::requiredIf($this->has('data.relationships.*.data.id')),Rule::in(array_keys(config('jsonapi.resources')))],
+
+            'data.relationships.*.data.*.id' => [Rule::requiredIf($this->has('data.relationships.*.data.0')), 'string'],
+            'data.relationships.*.data.*.type' => [Rule::requiredIf($this->has('data.relationships.*.data.0')), Rule::in(array_keys(config('jsonapi.resources')))],
         ];
 
         return $this->mergeConfigRules($rules);

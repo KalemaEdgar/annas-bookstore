@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Book;
-use App\Http\Resources\AuthorsCollection;
+use App\Comment;
 use App\Services\JSONAPIService;
 use Illuminate\Http\Request;
 
-class BooksAuthorsRelatedController extends Controller
+class CommentsBooksRelatedController extends Controller
 {
 
     /**
@@ -17,11 +16,12 @@ class BooksAuthorsRelatedController extends Controller
 
     public function __construct(JSONAPIService $service)
     {
+
         $this->service = $service;
     }
 
-    public function index(Book $book)
+    public function index(Comment $comment)
     {
-        return $this->service->fetchRelated($book, 'authors');
+        return $this->service->fetchRelated($comment, 'books');
     }
 }

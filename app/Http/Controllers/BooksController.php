@@ -108,7 +108,8 @@ class BooksController extends Controller
         // // return new BooksResource($book);
         // return new JSONAPIResource($book);
 
-        return $this->service->updateResource($book, $request->input('data.attributes'));
+        // return $this->service->updateResource($book, $request->input('data.attributes'));
+        return $this->service->updateResource($book, $request->input('data.attributes'), $request->input('data.relationships'));
     }
 
     /**
