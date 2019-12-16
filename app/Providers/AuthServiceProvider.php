@@ -31,5 +31,12 @@ class AuthServiceProvider extends ServiceProvider
 
         // Enable Implicit grant code authorization
         // Passport::enableImplicitGrant();
+
+        // Adding Gates for authorization.
+        // We can use in all the controller methods where we only want the admin to have access
+        // We give it a closure to use whenever the admin-only gate needs evaluation (user should have a role of admin to pass)
+        Gate::define('admin-only', function ($user) {
+            return $user->role === 'admin';
+        });
     }
 }

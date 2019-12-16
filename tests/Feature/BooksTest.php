@@ -92,7 +92,7 @@ class BooksTest extends TestCase
         // Check that a POST request is sent to the endpoint and a book is created
         // Assert that the returned status is 201 Created
         // Check that the entry has been created in the database
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
 
         $this->postJson('/api/v1/books', [
@@ -137,7 +137,10 @@ class BooksTest extends TestCase
     public function it_validates_that_the_type_member_is_given_when_creating_a_book() 
     {
         // We need an invalid request object for the creation of our book by either leaving out a member or setting it with the wrong datatype.
-        $user = factory(User::class)->create();
+        // $user = factory(User::class)->create([
+        //     'role' => 'admin'
+        // ]);
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
 
         $this->postJson('/api/v1/books', [
@@ -177,7 +180,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_the_type_member_has_the_value_of_books_when_creating_a_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
 
         $this->postJson('/api/v1/books', [
@@ -216,7 +219,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_the_attributes_member_has_been_given_when_creating_a_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
 
         $this->postJson('/api/v1/books', [
@@ -243,7 +246,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_the_attributes_member_is_an_object_given_when_creating_a_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
 
         $this->postJson('/api/v1/books', [
@@ -272,7 +275,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_a_title_attribute_is_given_when_creating_a_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
 
         $this->postJson('/api/v1/books', [
@@ -304,7 +307,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_a_title_attribute_is_a_string_when_creating_a_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
         
         $this->postJson('/api/v1/books', [
@@ -337,7 +340,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_a_description_attribute_is_given_when_creating_a_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
         
         $this->postJson('/api/v1/books', [
@@ -369,7 +372,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_a_description_attribute_is_a_string_when_creating_a_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
 
         $this->postJson('/api/v1/books', [
@@ -402,7 +405,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_a_publication_year_attribute_is_given_when_creating_a_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
 
         $this->postJson('/api/v1/books', [
@@ -434,7 +437,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_a_publication_year_attribute_is_a_string_when_creating_a_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
 
         $this->postJson('/api/v1/books', [
@@ -467,7 +470,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_can_update_a_book_from_a_resource_object()
     {
-        Passport::actingAs(factory(User::class)->create());
+        Passport::actingAs(factory(User::class)->state('admin')->create());
         // We need our book to be created so we can update it with new data
         $book = factory(Book::class)->create();
 
@@ -514,7 +517,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_an_id_member_is_given_when_updating_an_book()
     {
-        Passport::actingAs(factory(User::class)->create());
+        Passport::actingAs(factory(User::class)->state('admin')->create());
         // We need our book to be created so we can update it with new data
         $book = factory(Book::class)->create();
 
@@ -554,7 +557,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_an_id_member_is_a_string_when_updating_an_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
         $book = factory(Book::class)->create();
 
@@ -594,7 +597,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_the_type_member_is_given_when_updating_an_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
         $book = factory(Book::class)->create();
         
@@ -633,7 +636,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_the_type_member_has_the_value_of_books_when_updating_an_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
         $book = factory(Book::class)->create();
 
@@ -673,7 +676,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_the_attributes_member_has_been_given_when_updating_an_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
         $book = factory(Book::class)->create();
 
@@ -708,7 +711,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_the_attributes_member_is_an_object_given_when_updating_a_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
         $book = factory(Book::class)->create();
 
@@ -744,7 +747,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_a_title_attribute_is_a_string_when_updating_an_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
         $book = factory(Book::class)->create();
 
@@ -782,7 +785,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_a_description_attribute_is_a_string_when_updating_an_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
         $book = factory(Book::class)->create();
         
@@ -820,7 +823,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_validates_that_a_publication_year_attribute_is_a_string_when_updating_a_book()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
         $book = factory(Book::class)->create();
         
@@ -858,7 +861,7 @@ class BooksTest extends TestCase
     /** @test */
     public function it_can_delete_a_book_through_a_delete_request() 
     {
-        Passport::actingAs(factory(User::class)->create());
+        Passport::actingAs(factory(User::class)->state('admin')->create());
         $book = factory(Book::class)->create();
 
         $this->delete('/api/v1/books/1', [], [

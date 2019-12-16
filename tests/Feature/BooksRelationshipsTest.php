@@ -52,7 +52,7 @@ class BooksRelationshipsTest extends TestCase
     /** @test */
     public function a_relationship_link_to_comments_returns_all_related_comments_as_resource_id_objects()
     {
-        $this->withoutExceptionHandling();
+        // $this->withoutExceptionHandling();
         
         $book = factory(Book::class)->create();
         $comments = factory(Comment::class, 3)->make();
@@ -87,11 +87,11 @@ class BooksRelationshipsTest extends TestCase
     /** @test */
     public function it_can_modify_relationships_to_authors_and_add_new_relationships()
     {
-        $this->withoutExceptionHandling();
+        // $this->withoutExceptionHandling();
 
         $book = factory(Book::class)->create();
         $authors = factory(Author::class, 10)->create();
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
 
         $this->patchJson('/api/v1/books/1/relationships/authors', [
@@ -125,7 +125,7 @@ class BooksRelationshipsTest extends TestCase
         $book = factory(Book::class)->create();
         $authors = factory(Author::class, 5)->create();
         $book->authors()->sync($authors->pluck('id'));
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
 
         $this->patchJson('/api/v1/books/1/relationships/authors', [
@@ -174,7 +174,7 @@ class BooksRelationshipsTest extends TestCase
         $book = factory(Book::class)->create();
         $authors = factory(Author::class, 3)->create();
         $book->authors()->sync($authors->pluck('id'));
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
     
         $this->patchJson('/api/v1/books/1/relationships/authors', [
@@ -201,7 +201,7 @@ class BooksRelationshipsTest extends TestCase
     {
         $book = factory(Book::class)->create();
         $authors = factory(Author::class, 5)->create();
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->state('admin')->create();
         Passport::actingAs($user);
 
         $this->patchJson('/api/v1/books/1/relationships/authors', [
