@@ -27,15 +27,15 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->prefix('v1')->group(function() {
 
     // Users
-    Route::apiResource('users', 'UsersController');
+    // Route::get('/user/current', function (Request $request) {
+    //     return $request->user();
+    // });
+    Route::get('/users/current', 'CurrentAuthenticatedUserController@show'); // Put this before the apiResource for users cause we dont want Laravel to think we are querying for the user called current (auto defined by the apiResource routes)
 
+    Route::apiResource('users', 'UsersController');
     Route::get('users/{user}/relationships/comments', 'UsersCommentsRelationshipsController@index')->name('users.relationships.comments');
     Route::patch('users/{user}/relationships/comments', 'UsersCommentsRelationshipsController@update')->name('users.relationships.comments');
     Route::get('users/{user}/comments', 'UsersCommentsRelatedController@index')->name('users.comments');
-
-    Route::get('/user/current', function (Request $request) {
-        return $request->user();
-    });
 
     // Route::get('/users/{user_id}', 'UsersController@show');
 
@@ -59,7 +59,6 @@ Route::middleware('auth:api')->prefix('v1')->group(function() {
     // Route for the related link - Get a collection of authors related to a certain book
     // We want to be able to get the related resource objects
     Route::get('books/{book}/authors', 'BooksAuthorsRelatedController@index')->name('books.authors');
-
     Route::get('books/{book}/relationships/comments', 'BooksCommentsRelationshipsController@index')->name('books.relationships.comments');
     Route::patch('books/{book}/relationships/comments', 'BooksCommentsRelationshipsController@update')->name('books.relationships.comments');
     Route::get('books/{book}/comments', 'BooksCommentsRelatedController@index')->name('books.comments');
@@ -71,10 +70,8 @@ Route::middleware('auth:api')->prefix('v1')->group(function() {
     // ------------------------------------
     // Authors Books Relationship routes - To be able to pick the books for a certain author
     // ------------------------------------
-    Route::get('authors/{author}/relationships/books', 'AuthorsBooksRelationshipsController@index')->name('authors.relationships.books');
-    
-    Route::patch('authors/{author}/relationships/books', 'AuthorsBooksRelationshipsController@update')->name('authors.relationships.books');
-    
+    Route::get('authors/{author}/relationships/books', 'AuthorsBooksRelationshipsController@index')->name('authors.relationships.books');    
+    Route::patch('authors/{author}/relationships/books', 'AuthorsBooksRelationshipsController@update')->name('authors.relationships.books');  
     Route::get('authors/{author}/books', 'AuthorsBooksRelatedController@index')->name('authors.books');
 
     // Comments
