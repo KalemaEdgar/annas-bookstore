@@ -99,7 +99,9 @@ return [
                 'books',
                 'users',
             ],
-            'allowedFilters' => [],
+            'allowedFilters' => [
+                // Spatie\QueryBuilder\Filter::exact('role'),
+            ],
             'validationRules'=> [
                 'create' => [
                     'data.attributes.message' => 'required|string',

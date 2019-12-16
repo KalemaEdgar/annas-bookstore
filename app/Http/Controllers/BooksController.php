@@ -21,6 +21,9 @@ class BooksController extends Controller
     public function __construct(JSONAPIService $service)
     {
         $this->service = $service;
+        // Allow the controller to use our Policy "BookPolicy"
+        // This helper method is automatically adding a middleware in front of all of our methods in our controller
+        $this->authorizeResource(Book::class, 'book');
     }
     /**
      * Display a listing of the resource.
