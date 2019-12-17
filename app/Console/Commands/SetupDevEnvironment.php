@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Hash;
 
 class SetupDevEnvironment extends Command
 {
@@ -40,9 +41,9 @@ class SetupDevEnvironment extends Command
     {
         $this->info('Setting up development environment');
         $this->MigrateAndSeedDatabase();
-        $user = $this->CreateJohnDoeUser();
-        $this->CreatePersonalAccessClient($user);
-        $this->CreatePersonalAccessToken($user);
+        // $user = $this->CreateJohnDoeUser();
+        $this->createUser('John Doe', 'john@example.com', 'admin');
+        $this->createUser('Jane Doe', 'jane@example.com');
         $this->info('All done. Bye!');
     }
 
@@ -52,18 +53,29 @@ class SetupDevEnvironment extends Command
         $this->call('db:seed');
     }
 
-    public function CreateJohnDoeUser()
+    public function createUser($name, $email, $role = 'user', $password = 'secret')
     {
-        $this->info('Creating John Doe user');
+        $this->info(PHP_EOL);
+        $this->info("Creating {$name} $role");
         $user = factory(User::class)->create([
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
-            'password' => bcrypt('secret'),
+            'name' => $name,
+            'email' => $email,
+            'role' => $role,
+            'password' => Hash::make($password),
         ]);
-        $this->info('John Doe created');
-        $this->warn('Email: john@example.com');
-        $this->warn('Password: secret');
-        return $user;
+
+        $this->createPersonalAccessClientAndTokenForUser($user);
+        $this->info("Done");
+        // return $user;
+    }
+
+    public function createPersonalAccessClientAndTokenForUser(User $user): void
+    {
+        $this->info(PHP_EOL);
+        $this->info("Creating personal access client and token for {$user->name}");
+        $this->CreatePersonalAccessClient($user);
+        $this->CreatePersonalAccessToken($user);
+        $this->info(PHP_EOL);
     }
 
     public function CreatePersonalAccessClient($user)
@@ -81,4 +93,18 @@ class SetupDevEnvironment extends Command
         $this->warn("Personal access token:");
         $this->line($token->accessToken);
     }
+
+    // public function CreateJohnDoeUser()
+    // {
+    //     $this->info('Creating John Doe user');
+    //     $user = factory(User::class)->create([
+    //         'name' => 'John Doe',
+    //         'email' => 'john@example.com',
+    //         'password' => bcrypt('secret'),
+    //     ]);
+    //     $this->info('John Doe created');
+    //     $this->warn('Email: john@example.com');
+    //     $this->warn('Password: secret');
+    //     return $user;
+    // }
 }

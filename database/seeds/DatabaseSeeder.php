@@ -13,5 +13,6 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(UsersTableSeeder::class);
         $this->call(AuthorsTableSeeder::class); // To be able to run the database seeder utilising the factory AuthorsFactory
+        $this->call(BooksTableSeeder::class);
     }
 }
