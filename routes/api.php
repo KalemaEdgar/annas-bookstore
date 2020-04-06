@@ -24,7 +24,7 @@ use Illuminate\Http\Request;
 
 // Modified the above route to add versioning of the API
 // Since our route is protected by the auth:api middleware, you cant access it without the Bearer token
-Route::middleware('auth:api')->prefix('v1')->group(function() {
+Route::middleware('auth:api')->prefix('v1')->group(function () {
 
     // Users
     // Route::get('/user/current', function (Request $request) {
@@ -70,8 +70,8 @@ Route::middleware('auth:api')->prefix('v1')->group(function() {
     // ------------------------------------
     // Authors Books Relationship routes - To be able to pick the books for a certain author
     // ------------------------------------
-    Route::get('authors/{author}/relationships/books', 'AuthorsBooksRelationshipsController@index')->name('authors.relationships.books');    
-    Route::patch('authors/{author}/relationships/books', 'AuthorsBooksRelationshipsController@update')->name('authors.relationships.books');  
+    Route::get('authors/{author}/relationships/books', 'AuthorsBooksRelationshipsController@index')->name('authors.relationships.books');
+    Route::patch('authors/{author}/relationships/books', 'AuthorsBooksRelationshipsController@update')->name('authors.relationships.books');
     Route::get('authors/{author}/books', 'AuthorsBooksRelatedController@index')->name('authors.books');
 
     // Comments
@@ -83,7 +83,6 @@ Route::middleware('auth:api')->prefix('v1')->group(function() {
     Route::get('comments/{comment}/relationships/books', 'CommentsBooksRelationshipsController@index')->name('comments.relationships.books');
     Route::patch('comments/{comment}/relationships/books', 'CommentsBooksRelationshipsController@update')->name('comments.relationships.books');
     Route::get('comments/{comment}/books', 'CommentsBooksRelatedController@index')->name('comments.books');
-    
 });
 
 // This route is protected using the Client Credentials Grant (OAuth2 grant).

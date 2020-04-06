@@ -76,7 +76,7 @@ class AuthorsController extends Controller
         // return new AuthorsResource($author);
         // return new JSONAPIResource($author);
         return $this->service->fetchResource($author);
-        
+
         // return $author;
 
         // return response()->json([
